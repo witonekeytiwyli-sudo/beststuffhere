@@ -187,17 +187,44 @@
             justify-content: center;
             min-height: 180px;
             max-height: 260px;
+            position: relative;
         }
-        .product-card:hover .img-wrapper {
-            box-shadow: 0 18px 28px -12px #3b2d6e40;
+        /* Placeholder enquanto a imagem carrega */
+        .img-wrapper .placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eaeef9;
+            color: #7a78a0;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            opacity: 1;
+            transition: opacity 0.4s;
+        }
+        .img-wrapper .placeholder i {
+            font-size: 2.2rem;
+            margin-right: 0.6rem;
+            opacity: 0.5;
         }
         .img-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s ease, opacity 0.4s;
             background: #f0f3fc;
+            position: relative;
+            z-index: 1;
+            opacity: 0; /* começa invisível, só aparece após carregar */
+        }
+        .img-wrapper img.loaded {
+            opacity: 1;
+        }
+        .img-wrapper img.error {
+            opacity: 0;
         }
         .product-card:hover .img-wrapper img {
             transform: scale(1.02);
@@ -289,7 +316,7 @@
             box-shadow: 0 12px 22px -8px #141322;
         }
 
-        /* ----- MODAL GERAL (preview) ----- */
+        /* ----- MODAL PREVIEW (only) ----- */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -393,199 +420,6 @@
             border-radius: 24px;
         }
 
-        /* ----- MODAL DE COMPRA (buy) ----- */
-        .buy-product-info {
-            display: flex;
-            align-items: baseline;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        }
-        .buy-product-info .buy-name {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: #1a1730;
-        }
-        .buy-product-info .buy-price {
-            background: #1e1e2f;
-            padding: 0.2rem 1rem;
-            border-radius: 60px;
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            border: 1px solid #ffffff30;
-        }
-
-        .payment-options {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .payment-option-btn {
-            background: rgba(255, 255, 255, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 24px;
-            padding: 1rem 1.2rem;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: #1a1730;
-            backdrop-filter: blur(4px);
-            text-align: left;
-            width: 100%;
-        }
-        .payment-option-btn:hover {
-            background: rgba(255, 255, 255, 0.8);
-            border-color: #b7a9e0;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px -10px rgba(30, 30, 47, 0.15);
-        }
-        .payment-option-btn i {
-            font-size: 1.6rem;
-            width: 2.2rem;
-            text-align: center;
-            color: #4b367c;
-        }
-        .payment-option-btn .option-label {
-            flex: 1;
-        }
-        .payment-option-btn .option-arrow {
-            color: #8a7aaa;
-            font-size: 1rem;
-        }
-
-        /* Gift card list dentro do modal */
-        .giftcard-section {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
-        }
-        .giftcard-section .gc-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #3a2e5c;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .giftcard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 0.6rem;
-            max-height: 280px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-        .giftcard-grid::-webkit-scrollbar {
-            width: 4px;
-        }
-        .giftcard-grid::-webkit-scrollbar-thumb {
-            background: rgba(30, 30, 47, 0.2);
-            border-radius: 10px;
-        }
-        .giftcard-item {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 16px;
-            padding: 0.55rem 0.7rem;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #1a1730;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-        .giftcard-item:hover {
-            background: rgba(255, 255, 255, 0.85);
-            transform: scale(1.03);
-            border-color: #b7a9e0;
-            box-shadow: 0 8px 16px -8px rgba(30, 30, 47, 0.12);
-        }
-        .giftcard-item .gc-amount {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1e1e2f;
-        }
-        .giftcard-item .gc-label {
-            font-size: 0.7rem;
-            font-weight: 400;
-            color: #5a4e7a;
-            opacity: 0.8;
-        }
-
-        .dm-proof-section {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-        .dm-proof-section .dm-info {
-            font-size: 0.9rem;
-            color: #3a2e5c;
-            line-height: 1.5;
-        }
-        .dm-proof-section .dm-info strong {
-            color: #1a1730;
-        }
-        .btn-dm {
-            background: #1e1e2f;
-            color: white;
-            border: none;
-            padding: 0.9rem 1.5rem;
-            border-radius: 60px;
-            font-weight: 600;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.25s;
-            text-decoration: none;
-            width: 100%;
-            box-shadow: 0 8px 16px -6px #1e1e2f60;
-        }
-        .btn-dm:hover {
-            background: #2d2b4a;
-            transform: scale(1.01);
-            box-shadow: 0 12px 22px -8px #141322;
-        }
-        .btn-dm i {
-            font-size: 1.2rem;
-            color: #9bb1ff;
-        }
-
-        .back-to-options {
-            background: none;
-            border: none;
-            color: #5a4e7a;
-            font-weight: 500;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0.4rem 0;
-            transition: color 0.2s;
-            margin-top: 0.4rem;
-        }
-        .back-to-options:hover {
-            color: #1a1730;
-        }
-
         .footer-wave {
             margin-top: 3.5rem;
             text-align: center;
@@ -631,13 +465,6 @@
                 padding: 1.2rem;
                 border-radius: 28px;
             }
-            .giftcard-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            }
-            .payment-option-btn {
-                padding: 0.8rem 1rem;
-                font-size: 0.95rem;
-            }
         }
     </style>
 </head>
@@ -651,9 +478,9 @@
                 <h1>ÆON·best folders</h1>
                 <span><i class="fas fa-sparkle" style="color:#9f87ff;"></i> instant preview · buy now</span>
             </div>
-            <a href="https://t.me/Jayson_shop1" target="_blank" class="telegram-badge">
+            <a href="https://t.me/Get_full_acess1" target="_blank" class="telegram-badge">
                 <i class="fab fa-telegram-plane"></i>
-                <span>@Jayson_shop1</span>
+                <span>@Get_full_acess1</span>
                 <i class="fas fa-arrow-up-right-from-square" style="font-size: 0.75rem; opacity: 0.8;"></i>
             </a>
         </header>
@@ -667,7 +494,7 @@
         </div>
     </div>
 
-    <!-- MODAL: Preview -->
+    <!-- MODAL: Preview only -->
     <div class="modal-overlay" id="previewModal">
         <div class="modal-card">
             <div class="modal-header">
@@ -680,25 +507,12 @@
         </div>
     </div>
 
-    <!-- MODAL: Buy (Gift Card / DM / PayPal) -->
-    <div class="modal-overlay" id="buyModal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3 id="buyModalTitle">💎 Complete your purchase</h3>
-                <button class="close-modal" id="closeBuyBtn"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body" id="buyModalBody">
-                <!-- dynamic content injected by JS -->
-            </div>
-        </div>
-    </div>
-
     <script>
         (function() {
             "use strict";
 
             // --------------------------------------------------------------
-            // 1. PRODUTOS (preços: $30 para todos, exceto os que têm "ALL" no nome)
+            // 1. PRODUCTS
             // --------------------------------------------------------------
             const products = [
                 { id: 1, name: "MOM AND SON", price: 30, description: "MOM AND SON GET FUCKED BEST STUFF 30GB.",
@@ -721,8 +535,8 @@
                     preview: "https://files.catbox.moe/74sdmx.mp4" },
                 { id: 7, name: "ALL CONTENT 30TB", price: 200,
                     description: "ALL CP / ALL TEENS / ALL VIP CHANNELS AND UPDATES EVERY WEEK.",
-                    image: "https://files.catbox.m",
-                    preview:"https://files.catbox.moe/kfy96e.mp4" },
+                    image: "https://files.catbox.moe/fm22ji.jpeg",
+                    preview: "https://files.catbox.moe/kfy96e.mp4" },
                 { id: 8, name: "LIZZY AND BRO", price: 30, description: "MORE THAN 45GB.",
                     image: "https://files.catbox.moe/5zsmkh.jpeg",
                     preview: "https://files.catbox.moe/rjuesd.mp4" },
@@ -756,44 +570,10 @@
                     preview: "https://files.catbox.moe/b3aggs.mp4" }
             ];
 
-            // --------------------------------------------------------------
-            // 2. GIFT CARDS (lista fornecida)
-            // --------------------------------------------------------------
-            const giftCards = [
-                { amount: "$10", url: "https://www.g2a.com/binance-gift-card-10-usdt-key-i10000301475008" },
-                { amount: "$15", url: "https://www.g2a.com/binance-gift-card-15-usdt-key-i10000301475013" },
-                { amount: "$20", url: "https://www.g2a.com/binance-gift-card-20-usdt-key-i10000301475012" },
-                { amount: "$22", url: "https://www.g2a.com/binance-gift-card-22-usdt-key-i10000301475126" },
-                { amount: "$25", url: "https://www.g2a.com/binance-gift-card-25-usdt-key-i10000301475003" },
-                { amount: "$29", url: "https://www.g2a.com/binance-gift-card-29-usdt-key-i10000337768224" },
-                { amount: "$30", url: "https://www.g2a.com/binance-gift-card-30-usdt-key-i10000301475007" },
-                { amount: "$33", url: "https://www.g2a.com/binance-gift-card-33-usdt-key-i10000301475127" },
-                { amount: "$35", url: "https://www.g2a.com/binance-gift-card-35-usdt-key-i10000337768552" },
-                { amount: "$40", url: "https://www.g2a.com/binance-gift-card-40-usdt-key-i10000301475065" },
-                { amount: "$44", url: "https://www.g2a.com/binance-gift-card-44-usdt-key-i10000301475119" },
-                { amount: "$45", url: "https://www.g2a.com/binance-gift-card-45-usdt-key-i10000301475097" },
-                { amount: "$46", url: "https://www.g2a.com/binance-gift-card-46-usdt-key-i10000337768227" },
-                { amount: "$50", url: "https://www.g2a.com/binance-gift-card-50-usdt-key-i10000301475002" },
-                { amount: "$55", url: "https://www.g2a.com/binance-gift-card-55-usdt-key-i10000301475128" },
-                { amount: "$60", url: "https://www.g2a.com/binance-gift-card-60-usdt-key-i10000301475064" },
-                { amount: "$65", url: "https://www.g2a.com/binance-gift-card-65-usdc-key-i10000337768064" },
-                { amount: "$70", url: "https://www.g2a.com/binance-gift-card-70-usdt-key-i10000301475063" },
-                { amount: "$75", url: "https://www.g2a.com/binance-gift-card-75-usdt-key-i10000301475016" },
-                { amount: "$80", url: "https://www.g2a.com/binance-gift-card-80-usdt-key-i10000301475062" },
-                { amount: "$85", url: "https://www.g2a.com/binance-gift-card-85-usdt-key-i10000337768554" },
-                { amount: "$90", url: "https://www.g2a.com/binance-gift-card-90-usdt-key-i10000301475061" },
-                { amount: "$95", url: "https://www.g2a.com/binance-gift-card-95-usdt-key-i10000337768553" },
-                { amount: "$100", url: "https://www.g2a.com/binance-gift-card-100-usdt-key-i10000301475001" },
-                { amount: "$125", url: "https://www.g2a.com/binance-gift-card-125-usdt-key-i10000301475060" },
-                { amount: "$150", url: "https://www.g2a.com/binance-gift-card-150-usdt-key-i10000301475015" },
-                { amount: "$175", url: "https://www.g2a.com/binance-gift-card-175-usdt-key-i10000301475059" },
-                { amount: "$200", url: "https://www.g2a.com/binance-gift-card-200-usdt-key-i10000301475004" }
-            ];
-
-            const TELEGRAM_USERNAME = "Jayson_shop1";
+            const TELEGRAM_USERNAME = "Get_full_acess1";
 
             // --------------------------------------------------------------
-            // 3. HELPERS
+            // 2. HELPERS
             // --------------------------------------------------------------
             function isVideoUrl(url) {
                 if (!url) return false;
@@ -801,8 +581,22 @@
                 return ext.some(e => url.toLowerCase().includes(e));
             }
 
+            function openTelegramDM(message) {
+                const encoded = encodeURIComponent(message);
+                const link = `https://t.me/${TELEGRAM_USERNAME}?text=${encoded}`;
+                window.open(link, '_blank');
+            }
+
+            function buildPurchaseMessage(product) {
+                const priceFmt = product.price.toFixed(2);
+                return (
+                    `Hello! I am interested in buying *${product.name}* for $${priceFmt}. ` +
+                    `Could you please let me know the available payment methods? Thank you!`
+                );
+            }
+
             // --------------------------------------------------------------
-            // 4. RENDER PRODUTOS
+            // 3. RENDER PRODUCTS (com placeholders robustos)
             // --------------------------------------------------------------
             const grid = document.getElementById('productGrid');
 
@@ -819,8 +613,10 @@
                 <div class="product-card" data-product-id="${p.id}">
                   <div class="card-content">
                     <div class="img-wrapper">
+                      <span class="placeholder"><i class="fas fa-image"></i> loading...</span>
                       <img src="${p.image}" alt="${p.name}" loading="lazy"
-                           onerror="this.style.backgroundColor='#eaeef9'; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22 viewBox=%220 0 400 300%22%3E%3Crect width=%22400%22 height=%22300%22 fill=%22%23f0f3fc%22/%3E%3Ctext x=%2220%22 y=%22150%22 font-family=%22Inter%22 font-size=%2216%22 fill=%22%234a4566%22%3EImage not found%3C/text%3E%3C/svg%3E';" />
+                           onload="this.classList.add('loaded'); this.previousElementSibling.style.opacity='0';"
+                           onerror="this.classList.add('error'); this.previousElementSibling.innerHTML='<i class=\\'fas fa-exclamation-triangle\\'></i> image failed'; this.previousElementSibling.style.opacity='1';" />
                     </div>
                     <div class="product-name">
                       ${p.name}
@@ -829,7 +625,7 @@
                     <p class="description">${p.description}</p>
                     <div class="action-group">
                       ${previewBtn}
-                      <button class="btn btn-buy" data-buy='${JSON.stringify({id:p.id, name:p.name, price:p.price})}'>
+                      <button class="btn btn-buy" data-product='${JSON.stringify({id:p.id, name:p.name, price:p.price})}'>
                         <i class="fas fa-bolt"></i> Buy now
                       </button>
                     </div>
@@ -842,7 +638,7 @@
             renderProducts();
 
             // --------------------------------------------------------------
-            // 5. MODAL PREVIEW
+            // 4. MODAL PREVIEW
             // --------------------------------------------------------------
             const previewModal = document.getElementById('previewModal');
             const previewTitle = document.getElementById('modalTitle');
@@ -888,196 +684,10 @@
             }
 
             // --------------------------------------------------------------
-            // 6. MODAL BUY (Gift Card / DM / PayPal)
-            // --------------------------------------------------------------
-            const buyModal = document.getElementById('buyModal');
-            const buyModalBody = document.getElementById('buyModalBody');
-            const closeBuyBtn = document.getElementById('closeBuyBtn');
-            let currentBuyProduct = null;
-            let buyView = 'options';
-
-            // Helper: abre o Telegram com mensagem personalizada
-            function openTelegramDM(message) {
-                const encoded = encodeURIComponent(message);
-                const link = `https://t.me/${TELEGRAM_USERNAME}?text=${encoded}`;
-                window.open(link, '_blank');
-            }
-
-            function renderBuyModal(product, view = 'options') {
-                currentBuyProduct = product;
-                buyView = view;
-                const priceFmt = product.price.toFixed(2);
-                let html = '';
-
-                // cabeçalho do produto
-                html += `
-              <div class="buy-product-info">
-                <span class="buy-name">${product.name}</span>
-                <span class="buy-price">$${priceFmt}</span>
-              </div>
-            `;
-
-                if (view === 'options') {
-                    html += `
-                <div class="payment-options">
-                  <button class="payment-option-btn" id="buyOptionGift">
-                    <i class="fas fa-gift"></i>
-                    <span class="option-label">💳 Pay with Gift Card</span>
-                    <span class="option-arrow"><i class="fas fa-chevron-right"></i></span>
-                  </button>
-                  <button class="payment-option-btn" id="buyOptionPayPal">
-                    <i class="fab fa-paypal"></i>
-                    <span class="option-label">💸 Pay with PayPal</span>
-                    <span class="option-arrow"><i class="fas fa-chevron-right"></i></span>
-                  </button>
-                  <button class="payment-option-btn" id="buyOptionDM">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span class="option-label">📤 Send Proof to DM</span>
-                    <span class="option-arrow"><i class="fas fa-chevron-right"></i></span>
-                  </button>
-                </div>
-                <div style="margin-top: 0.8rem; font-size:0.8rem; color:#5a4e7a; text-align:center; opacity:0.7;">
-                  <i class="fas fa-lock" style="margin-right:4px;"></i> Secure checkout · instant delivery
-                </div>
-              `;
-                } else if (view === 'giftcard') {
-                    let gcHtml = '';
-                    giftCards.forEach(gc => {
-                        gcHtml += `
-                  <a href="${gc.url}" target="_blank" rel="noopener noreferrer" class="giftcard-item">
-                    <span class="gc-amount">${gc.amount}</span>
-                    <span class="gc-label">USDT</span>
-                  </a>
-                `;
-                    });
-
-                    html += `
-                <div class="giftcard-section">
-                  <div class="gc-title"><i class="fas fa-gift" style="color:#6d5f9e;"></i> Choose your Gift Card amount</div>
-                  <div class="giftcard-grid">${gcHtml}</div>
-                  <button class="back-to-options" id="backToOptions"><i class="fas fa-arrow-left"></i> Back to payment options</button>
-                </div>
-              `;
-                } else if (view === 'dm') {
-                    const msg =
-                        `Hello! I'm interested in buying *${product.name}* for $${priceFmt}. I've sent the proof of payment. Please check and confirm. Thank you!`;
-                    html += `
-                <div class="dm-proof-section">
-                  <div class="dm-info">
-                    <i class="fas fa-info-circle" style="color:#6d5f9e; margin-right:6px;"></i>
-                    Send your payment proof directly to our Telegram support.<br />
-                    <strong>@${TELEGRAM_USERNAME}</strong> -- we'll verify and deliver your product instantly.
-                  </div>
-                  <button class="btn-dm" id="dmSendBtn">
-                    <i class="fab fa-telegram-plane"></i> Send Proof via Telegram
-                  </button>
-                  <button class="back-to-options" id="backToOptions"><i class="fas fa-arrow-left"></i> Back to payment options</button>
-                  <div style="margin-top:0.6rem; font-size:0.75rem; color:#5a4e7a; opacity:0.6; text-align:center;">
-                    <i class="fas fa-clock"></i> Automatic message pre-filled -- just send your proof!
-                  </div>
-                </div>
-              `;
-                } else if (view === 'paypal') {
-                    const msg =
-                        `Hello! I'm interested in buying *${product.name}* for $${priceFmt}. Please send me your PayPal email so I can complete the payment. Thank you!`;
-                    html += `
-                <div class="dm-proof-section">
-                  <div class="dm-info">
-                    <i class="fas fa-info-circle" style="color:#6d5f9e; margin-right:6px;"></i>
-                    We'll send you a PayPal invoice to the email you provide.<br />
-                    <strong>@${TELEGRAM_USERNAME}</strong> -- reply with your PayPal email to proceed.
-                  </div>
-                  <button class="btn-dm" id="paypalSendBtn">
-                    <i class="fab fa-paypal"></i> Request PayPal Invoice
-                  </button>
-                  <button class="back-to-options" id="backToOptions"><i class="fas fa-arrow-left"></i> Back to payment options</button>
-                  <div style="margin-top:0.6rem; font-size:0.75rem; color:#5a4e7a; opacity:0.6; text-align:center;">
-                    <i class="fas fa-clock"></i> Pre-filled message -- just send your PayPal email!
-                  </div>
-                </div>
-              `;
-                }
-
-                buyModalBody.innerHTML = html;
-
-                // bind events
-                const optGift = document.getElementById('buyOptionGift');
-                const optPayPal = document.getElementById('buyOptionPayPal');
-                const optDM = document.getElementById('buyOptionDM');
-                const backBtn = document.getElementById('backToOptions');
-                const dmSendBtn = document.getElementById('dmSendBtn');
-                const paypalSendBtn = document.getElementById('paypalSendBtn');
-
-                if (optGift) {
-                    optGift.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (currentBuyProduct) renderBuyModal(currentBuyProduct, 'giftcard');
-                    });
-                }
-                if (optPayPal) {
-                    optPayPal.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (currentBuyProduct) renderBuyModal(currentBuyProduct, 'paypal');
-                    });
-                }
-                if (optDM) {
-                    optDM.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (currentBuyProduct) renderBuyModal(currentBuyProduct, 'dm');
-                    });
-                }
-                if (backBtn) {
-                    backBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (currentBuyProduct) renderBuyModal(currentBuyProduct, 'options');
-                    });
-                }
-                if (dmSendBtn) {
-                    dmSendBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (currentBuyProduct) {
-                            const priceFmt = currentBuyProduct.price.toFixed(2);
-                            const msg =
-                                `Hello! I'm interested in buying *${currentBuyProduct.name}* for $${priceFmt}. I've sent the proof of payment. Please check and confirm. Thank you!`;
-                            openTelegramDM(msg);
-                            closeBuyModal();
-                        }
-                    });
-                }
-                if (paypalSendBtn) {
-                    paypalSendBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        if (currentBuyProduct) {
-                            const priceFmt = currentBuyProduct.price.toFixed(2);
-                            const msg =
-                                `Hello! I'm interested in buying *${currentBuyProduct.name}* for $${priceFmt}. Please send me your PayPal email so I can complete the payment. Thank you!`;
-                            openTelegramDM(msg);
-                            closeBuyModal();
-                        }
-                    });
-                }
-            }
-
-            function openBuyModal(product) {
-                if (!product) return;
-                document.getElementById('buyModalTitle').textContent = '💎 Complete your purchase';
-                renderBuyModal(product, 'options');
-                buyModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeBuyModal() {
-                buyModal.classList.remove('active');
-                document.body.style.overflow = '';
-                currentBuyProduct = null;
-                buyView = 'options';
-            }
-
-            // --------------------------------------------------------------
-            // 7. EVENTOS GLOBAIS (cliques em preview / buy)
+            // 5. EVENT DELEGATION
             // --------------------------------------------------------------
             document.addEventListener('click', function(e) {
-                // Preview
+                // Preview button
                 const previewBtn = e.target.closest('.btn-preview');
                 if (previewBtn) {
                     e.preventDefault();
@@ -1088,43 +698,37 @@
                     return;
                 }
 
-                // Buy
+                // Buy now button → direct to Telegram DM with product info
                 const buyBtn = e.target.closest('.btn-buy');
                 if (buyBtn) {
                     e.preventDefault();
-                    const dataAttr = buyBtn.getAttribute('data-buy');
+                    const dataAttr = buyBtn.getAttribute('data-product');
                     if (dataAttr) {
                         try {
                             const prodData = JSON.parse(dataAttr);
                             const fullProduct = products.find(p => p.id === prodData.id);
-                            if (fullProduct) {
-                                openBuyModal(fullProduct);
-                            } else {
-                                openBuyModal(prodData);
-                            }
+                            const target = fullProduct || prodData;
+                            const message = buildPurchaseMessage(target);
+                            openTelegramDM(message);
                         } catch (_) {}
                     }
                     return;
                 }
 
-                // fechar modais clicando no overlay
+                // Close preview on overlay click
                 if (e.target === previewModal) closePreviewModal();
-                if (e.target === buyModal) closeBuyModal();
             });
 
-            // fechar com ESC
+            // ESC to close preview
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (previewModal.classList.contains('active')) closePreviewModal();
-                    if (buyModal.classList.contains('active')) closeBuyModal();
                 }
             });
 
-            // botoes fechar
             closePreview.addEventListener('click', closePreviewModal);
-            closeBuyBtn.addEventListener('click', closeBuyModal);
 
-            console.log('✨ ÆON store loaded · PayPal option added ✅');
+            console.log('✨ ÆON store loaded · Buy now → direct Telegram DM with product info ✅');
         })();
     </script>
 
